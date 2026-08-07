@@ -1,5 +1,8 @@
-# Arquivos que o chezmoi deve ignorar
+
+.git/
+.gitignore
 README.md
-LICENSE
-*.md
-.chezmoiignore
+system-configs/
+system-configs/**
+**.swp
+*.bak
