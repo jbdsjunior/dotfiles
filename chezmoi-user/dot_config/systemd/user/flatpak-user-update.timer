@@ -1,0 +1,12 @@
+[Unit]
+Description=Timer for User Flatpak Updates
+
+[Timer]
+OnBootSec=5m
+OnUnitActiveSec=15m
+RandomizedDelaySec=3m
+AccuracySec=5m
+Unit=flatpak-user-update.service
+
+[Install]
+WantedBy=timers.target
