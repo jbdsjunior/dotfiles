@@ -1,0 +1,5 @@
+# Arquivos que o chezmoi deve ignorar
+README.md
+LICENSE
+*.md
+.chezmoiignore
