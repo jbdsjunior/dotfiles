@@ -1,0 +1,14 @@
+# .chezmoi.toml.tmpl
+
+{{- $is_ostree := false -}}
+{{- if stat "/run/ostree-booted" -}}
+{{-   $is_ostree = true -}}
+{{- end -}}
+
+[data]
+    is_ostree = {{ $is_ostree }}
+    email = "{{ promptStringOnce . "email" "Seu e-mail do GitHub" }}"
+
+[git]
+    autoCommit = false
+    autoPush = false
