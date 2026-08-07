@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+# Hash das configurações de sistema para gatilho no chezmoi:
+# system-configs hash: {{ include "system-configs/etc/sysctl.d/60-kernel-tuning.conf" | sha256sum }}
+# profile.d hash: {{ include "system-configs/etc/profile.d/50-shell-env-overrides.sh" | sha256sum }}
+
+set -euo pipefail
+
+echo "==> Aplicando configurações do sistema em /etc..."
+
+SOURCE_DIR="{{ .chezmoi.sourceDir }}/system-configs/etc"
+
+if [ ! -d "$SOURCE_DIR" ]; then
+    echo "Diretório $SOURCE_DIR não encontrado. Pulando."
+    exit 0
+fi
+
+# Copia com preservação de permissões usando rsync ou cp
+sudo rsync -av --chown=root:root "$SOURCE_DIR/" /etc/
+
+# Recarrega configurações de sysctl e systemd se aplicável
+if command -v sysctl &> /dev/null; then
+    echo "==> Atualizando sysctl..."
+    sudo sysctl --system > /dev/null || true
+fi
+
+if command -v systemctl &> /dev/null; then
+    echo "==> Recarregando systemd daemon..."
+    sudo systemctl daemon-reload || true
+fi
+
+echo "==> Configurações de sistema aplicadas com sucesso!"
